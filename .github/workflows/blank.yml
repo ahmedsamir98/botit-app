@@ -22,7 +22,7 @@ jobs:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Copy docker-compose.yml to remote server
-        run: scp docker-compose.yml ubuntu@44.202.254.50:/opt/
+        run: scp docker-compose.yaml ubuntu@44.202.254.50:/opt/
 
       - name: SSH into the server and deploy with Docker Compose
         run: |
