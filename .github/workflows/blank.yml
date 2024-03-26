@@ -78,5 +78,5 @@ jobs:
           port: 22
           script: |
             cd /opt/botit-app/
-            docker-compose up -d
+            docker compose up -d
 
