@@ -1,18 +1,7 @@
 version: '3.8'
 
 services:
-  botit:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "5000:5000"
-
-version: '3.8'
-
-services:
   #DataBase Service
-
   gcctapi:
     container_name: botit-app
     image: ahmedsamir98/botit:##TAGS##
