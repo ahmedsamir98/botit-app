@@ -9,22 +9,22 @@ on:
       - master
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.5.3
         with:
-          python-version: 3.9
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Build Docker images
-        run: |
-          docker-compose -f path/to/your/docker-compose.yml build
+      - name: Copy docker-compose.yml to remote server
+        run: scp docker-compose.yml ubuntu@44.202.254.50:/opt/
 
-      - name: Deploy with Docker Compose
+      - name: SSH into the server and deploy with Docker Compose
         run: |
-          docker-compose -f path/to/your/docker-compose.yml up -d
+          ssh ubuntu@44.202.254.50 "cd /opt/ && docker-compose up -d"
+
