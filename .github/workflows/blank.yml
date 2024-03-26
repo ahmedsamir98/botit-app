@@ -13,9 +13,10 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      TIMESTAMP: ${{ steps.set_timestamp.outputs.timestamp }}
+      TIMESTAMP: "${{ steps.set_timestamp.outputs.timestamp }}"
 
     steps:
+
       - name: Set timestamp
         id: set_timestamp
         run: echo "::set-output name=timestamp::$(date +'%Y%m%d-%H%M')"
