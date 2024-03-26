@@ -6,7 +6,5 @@ services:
     container_name: botit-app
     image: ahmedsamir98/botit:$(date +%Y%m%d-%H%M)
     restart: always
-    labels:
-    -  staging='gcctapi'
     ports:
       - "5000:5000"
