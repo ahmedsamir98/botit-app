@@ -62,7 +62,7 @@ jobs:
           username: "${{ secrets.REMOTE_SERVER_USERNAME }}"
           key: "${{ secrets.SSH_PRIVATE_KEY }}"
           port: 22
-          source: "docker-compose.yml"
+          source: "docker-compose.yaml"
           target: "/opt/botit-app"
 
       - name: SSH into the server and deploy with Docker Compose
