@@ -35,43 +35,34 @@ jobs:
           push: true
           tags: ahmedsamir98/botit:${{ env.DATE }}
 
-      - uses: alex-ac/github-action-ssh-docker-compose@master
-        name: Docker-Compose Remote Deployment
-        with:
-          ssh_host: 44.202.254.50
-          ssh_private_key: "${{ secrets.SSH_PRIVATE_KEY }}"
-          ssh_user: ubuntu
-          docker_compose_prefix: docker-compose.yaml
-
       
-
       # - name: Build Docker image
       #   run: docker build -t ahmedsamir98/botit:$(date +'%Y%m%d-%H%M') .
       
       # - name: Push Docker image
       #   run: docker push ahmedsamir98/botit:$(date +'%Y%m%d-%H%M')
 
-      # - name: Set up SSH
-      #   run: |
-      #     env
-      #     mkdir -p ~/.ssh
-      #     echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-      #     chmod 600 ~/.ssh/id_rsa
-      #     ssh-keyscan -p 22 ${{ secrets.ARTIFACT_HOST }} >> ~/.ssh/known_hosts
-      # #   sudo apt-get install sshpass
+      - name: Set up SSH
+        run: |
+          env
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -p 22 ${{ secrets.ARTIFACT_HOST }} >> ~/.ssh/known_hosts
+      #   sudo apt-get install sshpass
 
       # # - name: Set up SSH key
       # #   uses: webfactory/ssh-agent@v0.5.3
       # #   with:
       # #     ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      # - name: Copy docker-compose.yaml to remote server
-      #   run: |
-      #     sudo mkdir -p /opt/botit-app
-      #     scp docker-compose.yaml ubuntu@44.202.254.50:/opt/botit-app
-      #     sed -i 's/##TAGS##/$(date +'%Y%m%d-%H%M')/g' docker-compose.yaml
+      - name: Copy docker-compose.yaml to remote server
+        run: |
+          sudo mkdir -p /opt/botit-app
+          scp docker-compose.yaml ubuntu@44.202.254.50:/opt/botit-app
+          sed -i 's/##TAGS##/${{ env.DATE }}/g' docker-compose.yaml
 
-      # - name: SSH into the server and deploy with Docker Compose
-      #   run: |
-      #     ssh ubuntu@44.202.254.50 "cd /opt/botit-app && sudo docker compose up -d"
+      - name: SSH into the server and deploy with Docker Compose
+        run: |
+          ssh ubuntu@44.202.254.50 "cd /opt/botit-app && sudo docker compose up -d"
 
