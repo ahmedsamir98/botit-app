@@ -4,7 +4,7 @@ services:
   #DataBase Service
   gcctapi:
     container_name: botit-app
-    image: ahmedsamir98/botit:$(date +%Y%m%d-%H%M)
+    image: ahmedsamir98/botit:##TAGS##
     restart: always
     ports:
       - "5000:5000"
