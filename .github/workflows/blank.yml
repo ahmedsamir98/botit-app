@@ -21,11 +21,11 @@ jobs:
 
       - name: Build Docker image
         run: |
-          IMAGE_TAG=ahmedsamir98/botit:${GITHUB_RUN_ID}
-          docker build -t IMAGE_TAG .
+          IMAGE_TAG=ahmedsamir98/botit:$(date +'%Y%m%d-%H%M')
+          docker build -t $IMAGE_TAG .
       
       - name: Push Docker image
-        run: docker push IMAGE_TAG
+        run: docker push ahmedsamir98/botit:$IMAGE_TAG
 
       # - name: Set up SSH
       #   run: |
