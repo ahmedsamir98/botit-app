@@ -16,26 +16,35 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up SSH key
-        run: |
-          env
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -p 22 ${{ secrets.ARTIFACT_HOST }} >> ~/.ssh/known_hosts
-      #   sudo apt-get install sshpass
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      - name: Build Docker image
+        run: docker build -t ahmedsamir98/botit:$(date +%s) .
+      
+      - name: Push Docker image
+        run: docker push ahmedsamir98/my-repo
 
       # - name: Set up SSH key
-      #   uses: webfactory/ssh-agent@v0.5.3
-      #   with:
-      #     ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      #   run: |
+      #     env
+      #     mkdir -p ~/.ssh
+      #     echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+      #     chmod 600 ~/.ssh/id_rsa
+      #     ssh-keyscan -p 22 ${{ secrets.ARTIFACT_HOST }} >> ~/.ssh/known_hosts
+      # #   sudo apt-get install sshpass
 
-      - name: Copy docker-compose.yaml to remote server
-        run: |
-          sudo mkdir -p /opt/botit-app
-          scp docker-compose.yaml ubuntu@44.202.254.50:/opt/botit-app
+      # # - name: Set up SSH key
+      # #   uses: webfactory/ssh-agent@v0.5.3
+      # #   with:
+      # #     ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: SSH into the server and deploy with Docker Compose
-        run: |
-          ssh ubuntu@44.202.254.50 "cd /opt/botit-app && sudo docker compose up -d"
+      # - name: Copy docker-compose.yaml to remote server
+      #   run: |
+      #     sudo mkdir -p /opt/botit-app
+      #     scp docker-compose.yaml ubuntu@44.202.254.50:/opt/botit-app
+
+      # - name: SSH into the server and deploy with Docker Compose
+      #   run: |
+      #     ssh ubuntu@44.202.254.50 "cd /opt/botit-app && sudo docker compose up -d"
 
