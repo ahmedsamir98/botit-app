@@ -1,4 +1,4 @@
-name: Python CI/CD
+name: botit-app
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
       - master
 
 jobs:
-  deploy:
+  botit-app:
     runs-on: ubuntu-latest
 
     steps:
