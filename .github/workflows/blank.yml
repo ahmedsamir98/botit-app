@@ -33,7 +33,7 @@ jobs:
       - name: Copy docker-compose.yaml to remote server
         run: |
           sudo mkdir -p /opt/botit-app
-          scp docker-compose.yaml ubuntu@44.202.254.50:/opt/botit-app/docker-compose.yaml
+          scp docker-compose.yaml ubuntu@44.202.254.50:/opt/
 
       - name: SSH into the server and deploy with Docker Compose
         run: |
