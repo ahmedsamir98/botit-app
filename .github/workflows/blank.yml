@@ -23,7 +23,7 @@ jobs:
         run: docker build -t ahmedsamir98/my-repo:$(date +'%Y%m%d-%H%M') .
       
       - name: Push Docker image
-        run: docker push ahmedsamir98/my-repo:$(date +'%Y%m%d-%H%M')
+        run: docker push ahmedsamir98/my-repo
 
       # - name: Set up SSH
       #   run: |
