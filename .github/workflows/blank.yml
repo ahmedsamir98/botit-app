@@ -51,9 +51,19 @@ jobs:
         run: |
           sed -i 's|image: ahmedsamir98/botit:##TAGS##|image: ahmedsamir98/botit:${{ env.DATE }}|g' docker-compose.yaml
 
-      - name: Copy docker-compose.yaml to remote server
-        run: |
-          scp docker-compose.yaml ubuntu@44.202.254.50:/opt/botit-app
+      # - name: Copy docker-compose.yaml to remote server
+      #   run: |
+      #     scp docker-compose.yaml ubuntu@44.202.254.50:/opt/botit-app
+
+      - name: Copy Docker Compose file to remote server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.ARTIFACT_HOST }}
+          username: ${{ secrets.REMOTE_SERVER_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          source: "docker-compose.yml"
+          target: "/opt/botit-app"
 
       - name: SSH into the server and deploy with Docker Compose
         run: |
