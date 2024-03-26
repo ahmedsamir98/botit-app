@@ -25,7 +25,7 @@ jobs:
       - name: Push Docker image
         run: docker push ahmedsamir98/my-repo
 
-      # - name: Set up SSH key
+      # - name: Set up SSH
       #   run: |
       #     env
       #     mkdir -p ~/.ssh
