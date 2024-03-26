@@ -65,7 +65,18 @@ jobs:
           source: "docker-compose.yaml"
           target: "/opt/botit-app"
 
-      - name: SSH into the server and deploy with Docker Compose
-        run: |
-          ssh ubuntu@44.202.254.50 "cd /opt/botit-app && sudo docker compose up -d"
+      # - name: SSH into the server and deploy with Docker Compose
+      #   run: |
+      #     ssh ubuntu@44.202.254.50 "cd /opt/botit-app && sudo docker compose up -d"
+
+      - name: SSH into remote server and start Docker Compose
+        uses: appleboy/ssh-action@master
+        with:
+          host: "${{ secrets.ARTIFACT_HOST }}"
+          username: "${{ secrets.REMOTE_SERVER_USERNAME }}"
+          key: "${{ secrets.SSH_PRIVATE_KEY }}"
+          port: 22
+          script: |
+            cd /opt/botit-app/
+            docker-compose up -d
 
