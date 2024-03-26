@@ -28,12 +28,19 @@ jobs:
       - name: Set env
         run: echo "DATE=$(date +'%Y%m%d-%H%M')" >> $GITHUB_ENV
       
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        with:
+          images: ahmedsamir98/botit
+
       - name: Build and push
         uses: docker/build-push-action@v3
         with:
           context: .
           push: true
-          tags: ahmedsamir98/botit:${{ env.DATE }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
 
       
       # - name: Build Docker image
@@ -42,6 +49,10 @@ jobs:
       # - name: Push Docker image
       #   run: docker push ahmedsamir98/botit:$(date +'%Y%m%d-%H%M')
 
+      - name: declare var
+        run: |
+          ssh ubuntu@44.202.254.50 "cd /opt/botit-app && sudo docker compose up -d"
+
       - name: Set up SSH
         run: |
           env
@@ -49,6 +60,10 @@ jobs:
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -p 22 ${{ secrets.ARTIFACT_HOST }} >> ~/.ssh/known_hosts
+
+
+
+
       #   sudo apt-get install sshpass
 
       # # - name: Set up SSH key
