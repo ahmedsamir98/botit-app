@@ -7,3 +7,17 @@ services:
       dockerfile: Dockerfile
     ports:
       - "5000:5000"
+
+version: '3.8'
+
+services:
+  #DataBase Service
+
+  gcctapi:
+    container_name: botit-app
+    image: ahmedsamir98/botit:##TAGS##
+    restart: always
+    labels:
+    -  staging='gcctapi'
+    ports:
+      - "5000:5000"
