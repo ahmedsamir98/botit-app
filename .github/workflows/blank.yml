@@ -23,7 +23,7 @@ jobs:
         run: docker build -t ahmedsamir98/botit:$(date +%s) .
       
       - name: Push Docker image
-        run: docker push ahmedsamir98/my-repo:$(date +%s)
+        run: docker push ahmedsamir98/my-repo:botit:$(date +%s)
 
       # - name: Set up SSH
       #   run: |
