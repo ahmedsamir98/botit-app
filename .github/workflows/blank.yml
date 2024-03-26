@@ -23,7 +23,6 @@ jobs:
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -p 22 ${{ secrets.ARTIFACT_HOST }} >> ~/.ssh/known_hosts
-          sudo mkdir -p /opt/botit-app
       #   sudo apt-get install sshpass
 
       # - name: Set up SSH key
@@ -33,7 +32,8 @@ jobs:
 
       - name: Copy docker-compose.yaml to remote server
         run: |
-          scp docker-compose.yaml ubuntu@44.202.254.50:/opt/botit-app/
+          sudo mkdir -p /opt/botit-app
+          scp docker-compose.yaml ubuntu@44.202.254.50:/opt/botit-app/docker-compose.yaml
 
       - name: SSH into the server and deploy with Docker Compose
         run: |
