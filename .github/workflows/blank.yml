@@ -16,9 +16,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: SSH-Compose
-        uses: matiasnu/github-action-ssh-docker-compose@v2.0.3
-
       # - name: Log in to Docker Hub
       #   run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
@@ -37,6 +34,14 @@ jobs:
           context: .
           push: true
           tags: ahmedsamir98/botit:${{ env.DATE }}
+
+      - uses: alex-ac/github-action-ssh-docker-compose@master
+        name: Docker-Compose Remote Deployment
+        with:
+          ssh_host: 44.202.254.50
+          ssh_private_key: "${{ secrets.SSH_PRIVATE_KEY }}"
+          ssh_user: ubuntu
+          docker_compose_prefix: docker-compose.yaml
 
       
 
