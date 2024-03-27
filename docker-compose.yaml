@@ -8,6 +8,8 @@ services:
     restart: always
     ports:
       - "5000:5000"
+    networks:
+      - botit
 
 networks:
   botit:
