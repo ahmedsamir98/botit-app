@@ -11,8 +11,9 @@ on:
 jobs:
   botit-app:
     runs-on: ubuntu-latest
-
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
       - name: slack notification
         uses: 8398a7/action-slack@v3
         with:
@@ -21,9 +22,6 @@ jobs:
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
         if: always() # Pick up events even if the job fails or is canceled.
-        
-      - name: Checkout code
-        uses: actions/checkout@v2
 
       - name: Login to Docker Hub
         uses: docker/login-action@v2
@@ -88,4 +86,13 @@ jobs:
           script: |
             cd /opt/botit-app/
             sudo docker compose up -d
+
+      - name: slack notification
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took # selectable (default: repo,message)
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
+        if: always() # Pick up events even if the job fails or is canceled.
             
