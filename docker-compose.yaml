@@ -12,5 +12,5 @@ services:
       - botit
 
 networks:
-  botit:
-    driver: bridge
+  botit-app_botit:
+    external: true
