@@ -14,14 +14,6 @@ jobs:
     env:
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
     steps:
-      - name: Slack Notification
-        uses: act10ns/slack@v1
-        with: 
-          status: starting
-          channel: '#meetups'
-          message: Starting Build and Deploy...
-        if: always()
-
       - name: Checkout code
         uses: actions/checkout@v2
 
@@ -90,3 +82,11 @@ jobs:
           script: |
             cd /opt/botit-app/
             sudo docker compose up -d
+            
+      - name: Slack Notification
+        uses: act10ns/slack@v1
+        with: 
+          status: ${{ job.status }}
+          channel: '#botit-app'
+          message: Teeeeeeeeeeeeeeeeeeeeest!!!!!!!!!!!!!
+        if: always()
