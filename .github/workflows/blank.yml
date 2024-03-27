@@ -11,8 +11,8 @@ on:
 jobs:
   botit-app:
     runs-on: ubuntu-latest
-    env:
-      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+    # env:
+    #   SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -83,10 +83,21 @@ jobs:
             cd /opt/botit-app/
             sudo docker compose up -d
             
-      - name: Slack Notification
-        uses: act10ns/slack@v1
-        with: 
+      # - name: Slack Notification
+      #   uses: act10ns/slack@v1
+      #   with: 
+      #     status: ${{ job.status }}
+      #     channel: '#botit-app'
+      #     message: Teeeeeeeeeeeeeeeeeeeeest!!!!!!!!!!!!!
+      #   if: always()
+
+      - uses: 8398a7/action-slack@v3
+        with:
+          text: "Slack message text. Failure :no_entry:"
           status: ${{ job.status }}
-          channel: '#botit-app'
-          message: Teeeeeeeeeeeeeeeeeeeeest!!!!!!!!!!!!!
+          fields: message,commit,author,eventName,ref,workflow,job,took
+          mention: 'here'
+          if_mention: failure,cancelled
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
         if: always()
