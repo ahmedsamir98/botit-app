@@ -1,8 +1,8 @@
 version: '3.8'
 
 services:
-  #DataBase Service
-  gcctapi:
+  
+  botit-app:
     container_name: botit-app
     image: ahmedsamir98/botit:##TAGS##
     restart: always
