@@ -79,4 +79,15 @@ jobs:
           script: |
             cd /opt/botit-app/
             sudo docker compose up -d
-
+            
+      - name: slack notification
+        uses: 8398a7/action-slack@v3
+        with:
+          text: "Slack message text. Failure :no_entry:"
+          status: ${{ job.status }}
+          fields: message,commit,author,eventName,ref,workflow,job,took
+          mention: 'here'
+          if_mention: failure,cancelled
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
+        if: always()
