@@ -9,7 +9,7 @@ services:
     ports:
       - "5000:5000"
     networks:
-      - botit
+      - botit-app_botit
 
 networks:
   botit-app_botit:
