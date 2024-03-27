@@ -13,6 +13,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: slack notification
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took # selectable (default: repo,message)
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
+        if: always() # Pick up events even if the job fails or is canceled.
+        
       - name: Checkout code
         uses: actions/checkout@v2
 
@@ -80,14 +89,3 @@ jobs:
             cd /opt/botit-app/
             sudo docker compose up -d
             
-      - name: slack notification
-        uses: 8398a7/action-slack@v3
-        with:
-          text: "Slack message text. Failure :no_entry:"
-          status: ${{ job.status }}
-          fields: message,commit,author,eventName,ref,workflow,job,took
-          mention: 'here'
-          if_mention: failure,cancelled
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
-        if: always()
