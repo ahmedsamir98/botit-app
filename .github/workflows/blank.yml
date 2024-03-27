@@ -39,13 +39,13 @@ jobs:
       # - name: Push Docker image
       #   run: docker push ahmedsamir98/botit:$(date +'%Y%m%d-%H%M')
 
-      - name: Set up SSH
-        run: |
-          env
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -p 22 ${{ secrets.ARTIFACT_HOST }} >> ~/.ssh/known_hosts
+      # - name: Set up SSH
+      #   run: |
+      #     env
+      #     mkdir -p ~/.ssh
+      #     echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+      #     chmod 600 ~/.ssh/id_rsa
+      #     ssh-keyscan -p 22 ${{ secrets.ARTIFACT_HOST }} >> ~/.ssh/known_hosts
           
       - name: Update docker-compose.yaml
         run: |
