@@ -1,15 +1,20 @@
 version: '3.8'
 
 services:
-  
+
   botit-app:
     container_name: botit-app
-    image: ahmedsamir98/botit:##TAGS##
+    image: ahmedsamir98/botit:20240327-1736
     restart: always
     ports:
       - "5000:5000"
     networks:
       - monitor_botit-app_botit
+    healthcheck:
+       test: ["CMD-SHELL", "curl -s -I http://44.202.254.50:5000/ | grep -q 'HTTP/1.1 200 Found'",]
+       interval: 10s
+       timeout: 10s
+       retries: 120
 
 networks:
   monitor_botit-app_botit:
