@@ -12,7 +12,7 @@ jobs:
   build_and_Push:
     runs-on: ubuntu-latest
     env:
-
+      DATE: ${{ steps.set_date.outputs.DATE }}
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
     steps: 
       - name: Set env
