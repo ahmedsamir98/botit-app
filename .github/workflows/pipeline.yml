@@ -64,9 +64,6 @@ jobs:
     env:
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
       - name: Checkout deployment branch
         uses: actions/checkout@v2
         with:
@@ -74,6 +71,7 @@ jobs:
 
       - name: Update docker-compose.yaml
         run: |
+          echo ${{ env.DATE }}
           sed -i 's|image: ahmedsamir98/botit:##TAGS##|image: ahmedsamir98/botit:${{ env.DATE }}|g' docker-compose.yaml
 
       - name: Copy Docker Compose file to remote server
