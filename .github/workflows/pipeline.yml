@@ -39,7 +39,7 @@ jobs:
 
       - name: Get test result
         run: |
-          echo $test_result
+          echo ${{ env.test_result }} 
 
       - name: Notify on Slack
         uses: rtCamp/action-slack-notify@v2
@@ -47,11 +47,11 @@ jobs:
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
           SLACK_CHANNEL: "#botit-app"
-          SLACK_MESSAGE: Test Case $test_result  
+          SLACK_MESSAGE: Test Case ${{ env.test_result }} 
           SLACK_USERNAME: GitHub Actions
         with:
           args: |
-            Test result: $test_result
+            Test result: ${{ env.test_result }} 
 
 
   # build_and_Push:
