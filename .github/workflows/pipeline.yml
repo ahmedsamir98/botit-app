@@ -30,7 +30,7 @@ jobs:
       - name: Run tests
         run: |
           python -m venv exvenv
-          python ./tests/test_hello.py > test_output.txt 2>&
+          python ./tests/test_hello.py > test_output.txt 2>&1
           if grep -q "OK" test_output.txt; then
             echo "::set-output name=test_result::success"
           else
