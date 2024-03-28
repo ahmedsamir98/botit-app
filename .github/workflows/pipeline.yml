@@ -132,18 +132,21 @@ jobs:
         if: success()
         uses: rtCamp/action-slack-notify@v2
         with:
-          status: 'Success'
           SLACK_CHANNEL: "#botit-app"
+          SLACK_COLOR: ${{ job.status }} # or a specific color like 'good' or '#ff00ff'
+          SLACK_MESSAGE: Deployment Is Okay!
+          SLACK_TITLE: Post Title
           SLACK_USERNAME: Botit-App
-          fields: repo,event,commit,author,workflow,job
-          slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
 
-      - name: Send Slack notification on deployment failure
+
+      - name: Send Slack Notification Build and Push completed
         if: failure()
         uses: rtCamp/action-slack-notify@v2
-        with:
-          status: 'Failure'
+        env:
           SLACK_CHANNEL: "#botit-app"
+          SLACK_COLOR: ${{ job.status }} # or a specific color like 'good' or '#ff00ff'
+          SLACK_MESSAGE: Deployment Is Not Okay!
+          SLACK_TITLE: Post Title
           SLACK_USERNAME: Botit-App
-          fields: repo,event,commit,author,workflow,job
-          slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
