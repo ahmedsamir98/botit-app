@@ -1,0 +1,11 @@
+groups:
+- name: botit-app.rules
+  rules:
+  - alert: BotitAppDown
+    expr: up{job="botit-app"} == 0
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Botit App is down (instance {{ $labels.instance }})"
+      description: "Botit App is down for more than 1 minute."

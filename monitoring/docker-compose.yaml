@@ -1,0 +1,51 @@
+version: "3"
+services:
+    prometheus:
+        container_name: prometheus
+        image: prom/prometheus:latest
+        ports:
+            - "9090:9090"
+        volumes:
+            - /opt/monitor/config/prometheus.yml:/etc/prometheus/prometheus.yml
+            - /opt/monitor/config/alert.rules.yml:/etc/prometheus/alert.rules.yml
+        networks:
+            - botit-app_botit
+    cadvisor:
+        image: gcr.io/cadvisor/cadvisor
+        container_name: cadvisor
+        privileged: true
+        devices:
+            - "/dev/kmsg:/dev/kmsg"
+        volumes:
+            - /:/rootfs:ro
+            - /var/run:/var/run:ro
+            - /sys:/sys:ro
+            - /var/lib/docker/:/var/lib/docker:ro
+            - /dev/disk/:/dev/disk:ro
+        ports:
+            - 8080:8080
+        networks:
+            - botit-app_botit
+    grafana:
+        image: grafana/grafana
+        container_name: grafana
+        ports:
+            - 3000:3000
+        environment:
+            - GF_SECURITY_ADMIN_PASSWORD=password
+        networks:
+            - botit-app_botit
+    alertmanager:
+        container_name: alertmanager
+        image: prom/alertmanager
+        volumes:
+          - /opt/monitor/config/alertmanager.yml:/etc/alertmanager/alertmanager.yml
+        ports:
+          - "9093:9093"
+        networks:
+            - botit-app_botit
+
+networks:
+  botit-app_botit:
+    driver: bridge
+
