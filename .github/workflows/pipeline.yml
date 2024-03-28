@@ -36,11 +36,9 @@ jobs:
       - name: Check test results and send Slack notification
         run: |
           if grep -q "OK" test_output.txt; then
-            echo -e "##########################\n### ### Test is OK #########\n##########################"
-            curl -X POST -H 'Content-type: application/json' --data '{"text":"Test is OK"}' $SLACK_WEBHOOK_URL
+            curl -X POST -H 'Content-type: application/json' --data '{"text":"##########################\n###### Test is OK #########\n##########################"}' $SLACK_WEBHOOK_URL
           else
-            echo -e "############################\n### ### Test is NOT OK #########\n############################"
-            curl -X POST -H 'Content-type: application/json' --data '{"text":"Test is NOT OK"}' $SLACK_WEBHOOK_URL
+            curl -X POST -H 'Content-type: application/json' --data '{"text":"############################\n### ### Test is NOT OK #########\n############################"}' $SLACK_WEBHOOK_URL
             exit 1
           fi
 
