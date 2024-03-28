@@ -35,7 +35,8 @@ jobs:
             test_result="success"
           else
             test_result="failure"
-          f
+          fi
+
       - name: Get test result
         run: |
           echo $test_result
