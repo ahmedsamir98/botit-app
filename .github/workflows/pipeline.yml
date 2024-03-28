@@ -14,7 +14,7 @@ jobs:
     env:
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
     steps: 
-      - name: Send Slack Notification build start
+      - name: Send Slack Notification Test start
         uses: rtCamp/action-slack-notify@v2
         env:
           SLACK_CHANNEL: "#botit-app"
@@ -86,7 +86,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ahmedsamir98/botit:${{ env.DATE }}
+          tags: Sahmedsamir98/botit:${{ env.DATE }}
 
       - name: Send Slack Notification Build and Push completed
         if: always()
@@ -94,7 +94,7 @@ jobs:
         env:
           SLACK_CHANNEL: "#botit-app"
           SLACK_COLOR: ${{ job.status }} # or a specific color like 'good' or '#ff00ff'
-          SLACK_MESSAGE: Build ${{ env.DATE }} ${{ job.status }} Pushed to the Repo 
+          SLACK_MESSAGE: Build ${{ env.DATE }} ${{ job.status }} pushed to the Repo 
           SLACK_TITLE: Message
           SLACK_USERNAME: Botit-App
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
