@@ -36,45 +36,25 @@ jobs:
       - name: Check test results and send Slack notification
         run: |
           if grep -q "OK" test_output.txt; then
+            echo -e "##########################\n### ### Test is OK #########\n##########################"
             curl -X POST -H 'Content-type: application/json' --data '{"text":"Test is OK"}' $SLACK_WEBHOOK_URL
           else
+            echo -e "############################\n### ### Test is NOT OK #########\n############################"
             curl -X POST -H 'Content-type: application/json' --data '{"text":"Test is NOT OK"}' $SLACK_WEBHOOK_URL
             exit 1
           fi
 
-      - name: Check test results and set env variable
-        run: |
-          if grep -q "OK" test_output.txt; then
-            echo "Test is OK"
-            echo "::set-env name=test_result::success"
-          else
-            echo "Test is NOT OK"
-            echo "::set-env name=test_result::failure"
-          fi
-      
       - name: Notify on Slack
-        if: always()
         uses: rtCamp/action-slack-notify@v2
+        if: always()
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
           SLACK_CHANNEL: "#botit-app"
+          SLACK_MESSAGE: Test Case ${{ env.test_result }} 
           SLACK_USERNAME: GitHub Actions
         with:
           args: |
             Test result: ${{ env.test_result }} 
-            ${{ if eq(env.test_result, 'success') }}:success: ${{ else }}:failure: ${{ endif }}
-
-      # - name: Notify on Slack
-      #   uses: rtCamp/action-slack-notify@v2
-      #   if: always()
-      #   env:
-      #     SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
-      #     SLACK_CHANNEL: "#botit-app"
-      #     SLACK_MESSAGE: Test Case ${{ env.test_result }} 
-      #     SLACK_USERNAME: GitHub Actions
-      #   with:
-      #     args: |
-      #       Test result: ${{ env.test_result }} 
 
 
   # build_and_Push:
