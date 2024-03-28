@@ -61,7 +61,9 @@ jobs:
           username: "${{ secrets.REMOTE_SERVER_USERNAME }}"
           key: "${{ secrets.SSH_PRIVATE_KEY }}"
           port: 22
-          script: IMAGE = ${{ env.DATE }}
+          script: |
+            IMAGE=${{ env.DATE }}
+            echo $IMAGE
 
   # deploy:
   #   runs-on: ubuntu-latest
