@@ -4,7 +4,7 @@ services:
 
   botit-app:
     container_name: botit-app
-    image: ahmedsamir98/botit:20240327-1736
+    image: ahmedsamir98/botit:##TAGS##
     restart: always
     ports:
       - "5000:5000"
