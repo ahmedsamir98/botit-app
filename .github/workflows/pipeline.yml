@@ -39,7 +39,7 @@ jobs:
 
       - name: Get test result
         run: |
-          echo ${{ env.test_result }} 
+          echo "${{ env.test_result }}" 
 
       - name: Notify on Slack
         uses: rtCamp/action-slack-notify@v2
