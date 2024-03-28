@@ -86,7 +86,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: Sahmedsamir98/botit:${{ env.DATE }}
+          tags: ahmedsamir98/botit:${{ env.DATE }}
 
       - name: Send Slack Notification Build and Push completed
         if: always()
