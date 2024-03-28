@@ -12,10 +12,11 @@ jobs:
   build_and_Push:
     runs-on: ubuntu-latest
     env:
+      DATE: ${{ github.run_number }}
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
     steps: 
-      - name: Set env
-        run: echo "DATE=$(date +'%Y%m%d-%H%M')" >> $GITHUB_ENV
+      # - name: Set env
+      #   run: echo "DATE=$(date +'%Y%m%d-%H%M')" >> $GITHUB_ENV
 
       - name: Send Slack Notification build start
         uses: rtCamp/action-slack-notify@v2
