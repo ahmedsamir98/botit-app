@@ -133,6 +133,8 @@ jobs:
         uses: rtCamp/action-slack-notify@v2
         with:
           status: 'Success'
+          SLACK_CHANNEL: "#botit-app"
+          SLACK_USERNAME: Botit-App
           fields: repo,event,commit,author,workflow,job
           slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
 
@@ -141,5 +143,7 @@ jobs:
         uses: rtCamp/action-slack-notify@v2
         with:
           status: 'Failure'
+          SLACK_CHANNEL: "#botit-app"
+          SLACK_USERNAME: Botit-App
           fields: repo,event,commit,author,workflow,job
           slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
