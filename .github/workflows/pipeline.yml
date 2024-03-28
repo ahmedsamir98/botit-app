@@ -66,8 +66,12 @@ jobs:
         with:
           ref: deployment  # Checkout the deployment branch
 
+      - name: Set env
+        run: echo "DATE=$(date +'%Y%m%d-%H%M')" >> $GITHUB_ENV
+
       - name: Update docker-compose.yaml
         run: |
+          echo ${{ env.DATE }}
           sed -i 's|image: ahmedsamir98/botit:##TAGS##|image: ahmedsamir98/botit:${{ env.DATE }}|g' docker-compose.yaml
 
       - name: Copy Docker Compose file to remote server
