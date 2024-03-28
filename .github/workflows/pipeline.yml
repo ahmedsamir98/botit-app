@@ -126,7 +126,7 @@ jobs:
           port: 22
           script: |
             cd /opt/botit-app/
-            sudo docker-compose up -d
+            sudo docker compose up -d
 
 
       - name: Send Slack Notification Build and Push completed
