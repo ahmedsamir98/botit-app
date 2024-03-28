@@ -12,10 +12,13 @@ jobs:
   build_and_Push:
     runs-on: ubuntu-latest
     env:
+      DATE: ${{ steps.set_date.outputs.DATE }}
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
     steps: 
       - name: Set env
+        id: set_date
         run: echo "DATE=$(date +'%Y%m%d-%H%M')" >> $GITHUB_ENV
+        shell: bash
 
       - name: Send Slack Notification build start
         uses: rtCamp/action-slack-notify@v2
@@ -54,22 +57,12 @@ jobs:
           SLACK_USERNAME: Botit-App
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
 
-      - name: SSH into remote server and set the image tag
-        uses: appleboy/ssh-action@master
-        with:
-          host: "${{ secrets.ARTIFACT_HOST }}"
-          username: "${{ secrets.REMOTE_SERVER_USERNAME }}"
-          key: "${{ secrets.SSH_PRIVATE_KEY }}"
-          port: 22
-          script: |
-            IMAGE=${{ env.DATE }}
-            echo $IMAGE
-
   deploy:
     runs-on: ubuntu-latest
     needs: build_and_Push
     if: ${{ needs.build_and_Push.result == 'success' }}
     env:
+      DATE: ${{ needs.build_and_Push.outputs.DATE }}
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
     steps:
       - name: Checkout deployment branch
@@ -80,7 +73,7 @@ jobs:
       - name: Update docker-compose.yaml
         run: |
           echo ${{ env.DATE }}
-          sed -i 's|image: ahmedsamir98/botit:##TAGS##|image: ahmedsamir98/botit:$IMAGE |g' docker-compose.yaml
+          sed -i 's|image: ahmedsamir98/botit:##TAGS##|image: ahmedsamir98/botit:${{ env.DATE }}|g' docker-compose.yaml
 
       - name: Copy Docker Compose file to remote server
         uses: appleboy/scp-action@master
