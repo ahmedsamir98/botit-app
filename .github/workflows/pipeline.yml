@@ -44,7 +44,6 @@ jobs:
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
           SLACK_CHANNEL: "#botit-app"
-          SLACK_MESSAGE: Test Cases ${{ steps.build.outputs.test_result }}
           SLACK_USERNAME: GitHub Actions
         with:
           args: |
