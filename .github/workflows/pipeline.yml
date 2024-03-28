@@ -32,9 +32,9 @@ jobs:
           python -m venv exvenv
           python ./tests/test_hello.py > test_output.txt 2>&1
           if grep -q "OK" test_output.txt; then
-            test_result="success"
+            test_result="success" >> $GITHUB_ENV
           else
-            test_result="failure"
+            test_result="failure" >> $GITHUB_ENV
           fi
 
       - name: Get test result
