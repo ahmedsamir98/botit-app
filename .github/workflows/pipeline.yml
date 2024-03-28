@@ -37,6 +37,11 @@ jobs:
             echo "::set-output name=test_result::failure"
             exit 1
           fi
+      - name: Get test result
+        run: |
+          echo "Test result is ${{ steps.test.outputs.test_result }}"
+          result=${{ steps.test.outputs.test_result }}"
+          echo $result
 
       - name: Notify on Slack
         uses: rtCamp/action-slack-notify@v2
