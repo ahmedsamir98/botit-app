@@ -15,6 +15,9 @@ services:
        interval: 10s
        timeout: 10s
        retries: 120
+    labels:
+       name: "botit-app"
+
 
 networks:
   monitor_botit-app_botit:

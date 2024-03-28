@@ -10,6 +10,8 @@ services:
             - /opt/monitor/config/alert.rules.yml:/etc/prometheus/alert.rules.yml
         networks:
             - botit-app_botit
+        labels:
+             name: "prometheus"
     cadvisor:
         image: gcr.io/cadvisor/cadvisor
         container_name: cadvisor
@@ -26,6 +28,9 @@ services:
             - 8080:8080
         networks:
             - botit-app_botit
+        labels:
+             name: "cadvisor"
+
     grafana:
         image: grafana/grafana
         container_name: grafana
@@ -35,6 +40,9 @@ services:
             - GF_SECURITY_ADMIN_PASSWORD=password
         networks:
             - botit-app_botit
+        labels:
+             name: "grafana"
+
     alertmanager:
         container_name: alertmanager
         image: prom/alertmanager
@@ -44,8 +52,28 @@ services:
           - "9093:9093"
         networks:
             - botit-app_botit
+        labels:
+             name: "alertmanager"
+
+    node-exporter:
+        image: prom/node-exporter
+        ports:
+          - 9100:9100
+        networks:
+            - botit-app_botit
+        labels:
+             name: "node-exporter"
+
+    prometheus-exporter:
+       container_name: prometheus-exporter
+       image: prometheus/exporter:latest
+       restart: always
+       command: >
+         sh -c "echo 'botit-app__health_check_status_metric 1' | nc -l -p 8080"
+       networks:
+         - botit-app_botit
+
 
 networks:
   botit-app_botit:
     driver: bridge
-
