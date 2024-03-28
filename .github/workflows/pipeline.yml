@@ -31,6 +31,7 @@ jobs:
         run: |
           python -m venv exvenv
           python ./tests/test_hello.py > test_output.txt 2>&1
+          echo "not ok" >  test_output.txt
 
 
       - name: Check test results and send Slack notification
