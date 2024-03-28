@@ -1,79 +1,100 @@
 version: "3"
+name: myapp
+
 services:
-    prometheus:
-        container_name: prometheus
-        image: prom/prometheus:latest
-        ports:
-            - "9090:9090"
-        volumes:
-            - /opt/monitor/config/prometheus.yml:/etc/prometheus/prometheus.yml
-            - /opt/monitor/config/alert.rules.yml:/etc/prometheus/alert.rules.yml
-        networks:
-            - botit-app_botit
-        labels:
-             name: "prometheus"
-    cadvisor:
-        image: gcr.io/cadvisor/cadvisor
-        container_name: cadvisor
-        privileged: true
-        devices:
-            - "/dev/kmsg:/dev/kmsg"
-        volumes:
-            - /:/rootfs:ro
-            - /var/run:/var/run:ro
-            - /sys:/sys:ro
-            - /var/lib/docker/:/var/lib/docker:ro
-            - /dev/disk/:/dev/disk:ro
-        ports:
-            - 8080:8080
-        networks:
-            - botit-app_botit
-        labels:
-             name: "cadvisor"
+  loki:
+    container_name: loki
+    image: grafana/loki:2.9.4
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - botit-app_botit
 
-    grafana:
-        image: grafana/grafana
-        container_name: grafana
-        ports:
-            - 3000:3000
-        environment:
-            - GF_SECURITY_ADMIN_PASSWORD=password
-        networks:
-            - botit-app_botit
-        labels:
-             name: "grafana"
+  promtail:
+    container_name: promtail
+    image: grafana/promtail:2.9.4
+    volumes:
+      - /opt/monitor/config/promtail-config.yaml:/etc/promtail/config.yml
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/log:/var/log
+    command: -config.file=/etc/promtail/config.yml
+    networks:
+      - botit-app_botit
 
-    alertmanager:
-        container_name: alertmanager
-        image: prom/alertmanager
-        volumes:
-          - /opt/monitor/config/alertmanager.yml:/etc/alertmanager/alertmanager.yml
-        ports:
-          - "9093:9093"
-        networks:
-            - botit-app_botit
-        labels:
-             name: "alertmanager"
+  grafana:
+    container_name: grafana
+    environment:
+      - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+    entrypoint:
+      - sh
+      - -euc
+      - |
+        mkdir -p /etc/grafana/provisioning/datasources
+        cat <<EOF > /etc/grafana/provisioning/datasources/ds.yaml
+        apiVersion: 1
+        datasources:
+        - name: Loki
+          type: loki
+          access: proxy
+          orgId: 1
+          url: http://loki:3100
+          basicAuth: false
+          isDefault: true
+          version: 1
+          editable: false
+        EOF
+        /run.sh
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    networks:
+      - botit-app_botit
 
-    node-exporter:
-        image: prom/node-exporter
-        ports:
-          - 9100:9100
-        networks:
-            - botit-app_botit
-        labels:
-             name: "node-exporter"
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - /opt/monitor/config/prometheus.yml:/etc/prometheus/prometheus.yml
+      - /opt/monitor/config/alert.rules.yml:/etc/prometheus/alert.rules.yml
+    networks:
+      - botit-app_botit
+    labels:
+      name: "prometheus"
 
-    prometheus-exporter:
-       container_name: prometheus-exporter
-       image: prometheus/exporter:latest
-       restart: always
-       command: >
-         sh -c "echo 'botit-app__health_check_status_metric 1' | nc -l -p 8080"
-       networks:
-         - botit-app_botit
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor
+    container_name: cadvisor
+    privileged: true
+    devices:
+      - "/dev/kmsg:/dev/kmsg"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+    ports:
+      - "8080:8080"
+    networks:
+      - botit-app_botit
+    labels:
+      name: "cadvisor"
 
+  node-exporter:
+    image: prom/node-exporter
+    ports:
+      - 9100:9100
+    networks:
+      - botit-app_botit
+    labels:
+      name: "node-exporter"
 
 networks:
   botit-app_botit:
     driver: bridge
+
