@@ -24,7 +24,7 @@ jobs:
           SLACK_CHANNEL: "#botit-app"
           SLACK_COLOR: ${{ job.status }} # or a specific color like 'good' or '#ff00ff'
           SLACK_ICON: https://is1-ssl.mzstatic.com/image/thumb/Purple126/v4/e8/03/67/e803678e-7616-6890-9958-dfaf295c3f4a/AppIcon-0-0-1x_U007ephone-0-0-0-85-220.png/512x512bb.jpg
-          SLACK_MESSAGE: Build ${{ env.DATE }} Start 
+          SLACK_MESSAGE: Build "${{ env.DATE }}" Start 
           SLACK_TITLE: Post Title
           SLACK_USERNAME: Botit-App
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
