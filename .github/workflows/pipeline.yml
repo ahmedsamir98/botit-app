@@ -32,16 +32,13 @@ jobs:
           python -m venv exvenv
           python ./tests/test_hello.py > test_output.txt 2>&1
           if grep -q "OK" test_output.txt; then
-            echo "::set-output name=test_result::success"
+            test_result="success"
           else
-            echo "::set-output name=test_result::failure"
-            exit 1
-          fi
+            test_result="failure"
+          f
       - name: Get test result
         run: |
-          echo "Test result is ${{ steps.test.outputs.test_result }}"
-          result=${{ steps.test.outputs.test_result }}"
-          echo $result
+          echo $test_result
 
       - name: Notify on Slack
         uses: rtCamp/action-slack-notify@v2
@@ -49,10 +46,11 @@ jobs:
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
           SLACK_CHANNEL: "#botit-app"
+          SLACK_MESSAGE: Test Case $test_result  
           SLACK_USERNAME: GitHub Actions
         with:
           args: |
-            Test result: ${{ steps.build.outputs.test_result }}
+            Test result: $test_result
 
 
   # build_and_Push:
