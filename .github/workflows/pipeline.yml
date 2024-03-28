@@ -128,18 +128,18 @@ jobs:
             cd /opt/botit-app/
             sudo docker compose up -d
 
-      - name: Notify Deployment Status to Slack
-        if: ${{ always() }}
+      - name: Send Slack notification on successful deployment
+        if: success()
         uses: rtCamp/action-slack-notify@v2
-        env:
-          SLACK_CHANNEL: "#botit-app"
-          SLACK_COLOR: ${{ job.status }}
-          SLACK_MESSAGE: |
-            ${{ if eq(needs.deploy.result, 'success') }}
-            Deployment of Botit-App Successful
-            ${{ else }}
-            Deployment of Botit-App Failed
-            ${{ end }}
-          SLACK_TITLE: Deployment Status
-          SLACK_USERNAME: Botit-App
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+        with:
+          status: 'Success'
+          fields: repo,event,commit,author,workflow,job
+          slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+      - name: Send Slack notification on deployment failure
+        if: failure()
+        uses: rtCamp/action-slack-notify@v2
+        with:
+          status: 'Failure'
+          fields: repo,event,commit,author,workflow,job
+          slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
