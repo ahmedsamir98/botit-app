@@ -39,6 +39,7 @@ jobs:
           password: "${{ secrets.DOCKER_PASSWORD }}"
 
       - name: Build and push
+        id: build_and_push
         uses: docker/build-push-action@v3
         with:
           context: .
@@ -58,6 +59,8 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
+    needs: build_and_Push
+    if: ${{ needs.build_and_Push.result == 'success' }}
     env:
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
     steps:
