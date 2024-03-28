@@ -32,14 +32,14 @@ jobs:
           python -m venv exvenv
           python ./tests/test_hello.py > test_output.txt 2>&1
           if grep -q "OK" test_output.txt; then
-            test_result="success" >> $GITHUB_ENV
-          else
-            test_result="failure" >> $GITHUB_ENV
-          fi
+          echo "::set-output name=test_result::success"
+            else
+          echo "::set-output name=test_result::failure"
+            fi
 
       - name: Get test result
         run: |
-          echo "${{ env.test_result }}" 
+          echo ${{ needs.run_tests.outputs.test_result }}  
 
       - name: Notify on Slack
         uses: rtCamp/action-slack-notify@v2
