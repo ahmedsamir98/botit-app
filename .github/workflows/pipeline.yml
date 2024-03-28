@@ -56,7 +56,7 @@ jobs:
         env:
           SLACK_CHANNEL: "#botit-app"
           SLACK_COLOR: ${{ job.status }} 
-          SLACK_MESSAGE: Build ${{ env.DATE }} Start 
+          SLACK_MESSAGE: Build Of Image ${{ env.DATE }} Start 
           SLACK_TITLE: Post Title
           SLACK_USERNAME: Botit-App
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
