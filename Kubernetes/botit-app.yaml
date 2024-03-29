@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: botit-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: botit-app
+  template:
+    metadata:
+      labels:
+        app: botit-app
+    spec:
+      containers:
+      - name: botit-app
+        image: ahmedsamir98/botit:20240329-1430
+        resources: {} 
+        ports:
+        - containerPort: 5000
