@@ -94,7 +94,19 @@ services:
     labels:
       name: "node-exporter"
 
+  nginx:
+    container_name: nginx
+    image: nginx
+    volumes:
+      - /opt/monitor/config/default.conf:/etc/nginx/conf.d/default.conf
+    restart: always
+    labels:
+      name: "nginx"  
+    ports:
+      - '80:80'
+    networks:
+      - botit-app_botit
+
 networks:
   botit-app_botit:
     driver: bridge
-
