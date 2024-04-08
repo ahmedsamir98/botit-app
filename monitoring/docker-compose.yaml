@@ -9,6 +9,8 @@ services:
     command: -config.file=/etc/loki/local-config.yaml
     networks:
       - botit-app_botit
+    ports:
+      - 3000:3000
 
   promtail:
     container_name: promtail
